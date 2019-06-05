@@ -1,0 +1,264 @@
+%!TEX program=xelatex
+\documentclass{article}
+%packages
+\usepackage[UTF8]{ctex} %中文字符
+\CTEXoptions[today=old]
+\usepackage[left=2.50cm, right=2.50cm, top=2.50cm, bottom=2.50cm]{geometry} %调整页边距
+\usepackage{xeCJK}
+\usepackage{enumerate}%使用枚举
+\usepackage{mathtools}
+\usepackage{titlesec}
+\renewcommand{\thesection}{\chinese{section}}%设置section
+\usepackage{bm}%加粗数学公式
+\usepackage{amssymb}%因为所以
+\usepackage{mathrsfs} %花体字
+\usepackage{amsmath}%不太花的花体字
+% MATLAB代码插入包
+\usepackage{listings}
+\usepackage[framed,numbered,autolinebreaks,useliterate]{mcode}
+
+\begin{document}
+\title{《信号检测与估计》作业三 \footnote{习题4.1\quad4.2\quad4.3\quad4.4}}
+\author{施念  1120161302}
+\date{May 9, 2019}
+\maketitle{}
+%\begin{abstract}%摘要部分
+%\end{abstract}
+%\tableofcontents%生成目录
+\section{第4章\ 估计的基本理论}
+\begin{enumerate}[1.]
+%%%%%%%%%%第1题
+\item 
+一随机参数\(\theta\)通过对另一随机变量\(z\)来观测，已知
+
+\[p(z|\theta ) = \left\{ {\begin{array}{*{20}{c}}
+{\theta {e^{ - \theta z}},z \ge 0,\theta  > 0}\\
+{0,\theta  < 0}
+\end{array}} \right.\]
+假定\(\theta\)的先验密度为
+
+\[p(\theta ) = \left\{ {\begin{array}{*{20}{c}}
+{\frac{{{l^n}}}{{\Gamma (n)}}{e^{ - \theta l}}{\theta ^{n - 1}},\theta  \ge 0}\\
+{0,\theta  < 0}
+\end{array}} \right.\]
+
+试求\({{\hat \theta }_{MAP}}\)与\({{\hat \theta }_{MS}}\)，并求\(E\{ {[\theta  - {{\hat \theta }_{MS}}]^2}\} \)。
+
+\textbf{解}：\\
+由题目可知：
+\[\begin{array}{l}
+\ln p(z|\theta ) = \ln \theta  - \ln z\\
+\ln p(\theta ) = \ln \left( {\frac{{{l^n}}}{{\Gamma (n)}}} \right) - \theta l + (n - 1)\ln \theta 
+\end{array}\]
+
+因此，有
+\[\frac{{\partial \ln p(z|\theta )}}{{\partial \theta }} + \frac{{\partial \ln p(\theta )}}{{\partial \theta }} = \frac{1}{\theta } - z - l + \frac{{n - 1}}{\theta }\]
+令其结果为0，得\({{\hat \theta }_{MAP}}\),其值为：
+\[{{\hat \theta }_{MAP}} = \frac{n}{{z + l}}\]
+
+同样，对\({{\hat \theta }_{MS}}\),有
+
+\begin{equation*}
+\begin{aligned}
+{{\hat \theta }_{MS}} =& \frac{{\int_0^\infty  {\theta p(z|\theta )p(\theta )} d\theta }}{{\int_0^\infty  {p(z|\theta )p(\theta )} d\theta }}\\
+=& \frac{{(n + 1)!}/{(z + l)}^{n + 2}}{n!/{(z + l)}^{n + 1}}\\
+=& \frac{{n + 1}}{{z + l}}
+\end{aligned}
+\end{equation*}
+
+接下来求解\(E\{ {[\theta  - {{\hat \theta }_{MS}}]^2}\} \)\\
+因为
+\begin{equation*}
+\begin{split}
+p(\theta ;z) =& p(z|\theta )p(\theta )\\
+ =& \left\{ {\begin{array}{*{20}{c}}
+{\frac{{{l^n}}}{{\Gamma (n)}}{\theta ^n}{e^{ - \theta (z + l)}},z \ge 0,\theta  > 0}\\
+{0,\theta  < 0}
+\end{array}} \right.
+\end{split}
+\end{equation*}
+
+所以，有
+\[\begin{aligned}
+  E\{{{[\theta -{{{\hat{\theta }}}_{MS}}]}^{2}}\}
+  &=\iint{\left[ {{\theta }^{2}}-2\theta \frac{n+1}{z+l}+{{\left( \frac{n+1}{z+l} \right)}^{2}} \right]p(\theta ;z)d\theta dz} \\ 
+ & =\frac{{{l}^{n}}}{\Gamma (n)}\int\limits_{0}^{\infty }{\left[ \frac{(n+2)!}{{{(z+l)}^{n+3}}}-2\frac{(n+1)!\times (n+1)}{{{(z+l)}^{n+3}}}+\frac{n!\times {{(n+1)}^{2}}}{{{(z+l)}^{n+3}}} \right]dz} \\ 
+ & ={{l}^{n}}\int\limits_{0}^{\infty }{\frac{n(n+1)(n+2)-2n{{(n+1)}^{2}}+n{{(n+1)}^{2}}}{{{(z+l)}^{n+3}}}dz} \\ 
+ & ={{l}^{n}}\int\limits_{0}^{\infty }{\frac{n(n+1)}{{{(z+l)}^{n+3}}}dz} \\ 
+ & =\frac{{{l}^{n}}n(n+1)}{-(n+2)}{{(z+l)}^{-(n+2)}}|_{0}^{\infty } \\ 
+ & =\frac{n(n+1)}{{{l}^{2}}(n+2)} \\ 
+\end{aligned}\]
+
+%%%%%%%%%第2题
+\item 
+根据一次观测\(z\)来估计信号的参量\(\theta\)。已知\\
+$$
+\begin{aligned}
+p(\theta)=&2exp(-2\theta), \quad \theta \ge 0\\
+p(z|\theta)=&\theta exp(-z\theta), \quad \theta \ge 0,z\ge 0\\
+\end{aligned}
+$$
+
+\begin{enumerate}[(1)]
+\item
+求估计量\({{\hat \theta }_{MAP}}(z)\)和\({{\hat \theta }_{MS}}(z)\)
+\item
+若\(z=2\)，求对应的估计值；若\(z=4\)，求对应的估计值。
+\end{enumerate}
+
+\textbf{解}：\\
+\begin{enumerate}[(1)]
+\item
+对\({{\hat \theta }_{MS}}(z)\)，根据定义计算得：
+\[\begin{aligned}
+{{{\hat{\theta }}}_{MS}}
+& =\frac{\int_{0}^{\infty }{\theta p(z|\theta )p(\theta )}d\theta }{\int_{0}^{\infty }{p(z|\theta )p(\theta )}d\theta } \\ 
+ & =\frac{\int_{0}^{\infty }{2{{\theta }^{2}}{{e}^{-\theta (z+2)}}}d\theta }{\int_{0}^{\infty }{2\theta {{e}^{-\theta (z+2)}}}d\theta } \\ 
+ & =\frac{2/(z+2)^3}{1/(z+2)^2}\\ 
+ & =\frac{2}{z+2} \\ 
+\end{aligned}\]
+对\({{\hat \theta }_{MAP}}(z)\)，因为
+\[\begin{aligned}
+  & \ln p(z|\theta )=\ln \theta -z\theta  \\ 
+ & \ln p(\theta )=\ln 2-2\theta  \\ 
+\end{aligned}\]
+所以，有
+\[\frac{\partial \ln p(z|\theta )}{\partial \theta }+\frac{\partial \ln p(\theta )}{\partial \theta }=\frac{1}{\theta }-z-2\]
+令其为0，可得：
+\[{{{\hat{\theta }}}_{MAP}}=\frac{1}{z+2}\]\\
+
+\item
+当$z=2$时，\({{\hat \theta }_{MS}}(2)=1/2\)，\({{\hat \theta }_{MAP}}(2)=1/4\)\\
+当$z=4$时，\({{\hat \theta }_{MS}}(4)=1/3\)，\({{\hat \theta }_{MAP}}(4)=1/6\)
+
+\end{enumerate}
+
+%%%%%%第3题
+\item
+给定独立观测序列$z_1,z_2,...,z_N$，具有均值$m$，方差$\sigma ^2$。
+\begin{enumerate}[(1)]
+\item
+%%%3.1
+问取样平均$$\mu = \frac{1}{N}\sum_{i=1}^N z_i$$是否为$m$的无偏估计？$\mu$的方差是什么？
+\item
+%%%3.2
+可以找出方差的估计为$$V=\frac{1}{N}\sum_{i=1}^N[z_i-\mu]^2$$问这是否是$\sigma^2$的无偏估计？试求他的方差。
+\end{enumerate}
+\textbf{解}：\\
+\begin{enumerate}[(1)]
+\item
+因为$$E[\mu]= \frac{1}{N}\sum_{i=1}^N E(z_i)=\frac{Nm}{N}=m$$
+所以$\mu$是$m$的无偏估计。\\
+
+若取$s_i=z_i-m$，则$E[s_is_j]=0,\quad i \ne j$
+$$
+\begin{aligned}
+\text{var}(\mu)
+&=E[(\mu-m)^2]\\
+&=\frac{1}{N^2}E[(\sum_{i=1}^Ns_i)^2)]\\
+&=\frac{1}{N^2}E[\sum_{i=1}^Ns_i^2)]\\
+&=\frac{N\sigma^2}{N^2}\\
+&=\frac{\sigma^2}{N}
+\end{aligned}
+$$
+即$\mu$的方差为$\frac{\sigma^2}{N}$\\
+\item
+因为
+$$
+\begin{aligned}
+E[V]
+&=\frac{1}{N}\sum_{i=1}^NE[(z_i-\mu)^2]\\
+&=\frac{1}{N}\sum_{i=1}^NE\{[(z_i-m)-(\mu-m)]^2\}\\
+&=\frac{1}{N}\sum_{i=1}^N\{E[(z_i-m]^2 -2E[(z_i-m)(\mu-m)] +E[(\mu-m)^2]\}\\
+&=\frac{1}{N}\sum_{i=1}^N\{\sigma^2-2\frac{1}{N}E[(z_i-m)^2]+\frac{\sigma^2}{N}\}\\
+&=\frac{1}{N}\sum_{i=1}^N(\sigma^2-\frac{\sigma^2}{N})\\
+&=\frac{N-1}{N}\sigma^2\\
+&\ne \sigma^2\\
+\end{aligned}
+$$
+所以$V=\frac{1}{N}\sum_{i=1}^N[z_i-\mu]^2$不是$\sigma^2$的无偏估计。\\
+
+从样本的角度出发：\\
+因为对于样本方差$S^2$，有$$S^2=\frac{1}{N-1}\sum_{i=1}^N(z_i-\mu)^2=\frac{N}{N-1}V$$
+$$E(S^2)=\sigma^2$$
+$$\text{Var}(S^2)=\frac{1}{N}\left( m^4-\frac{N-3}{N-1}\sigma^4\right)$$
+所以$$E[V]=\frac{N-1}{N}E(S^2)=\frac{N-1}{N}\sigma^2$$
+对于$V=\frac{1}{N}\sum_{i=1}^N[z_i-\mu]^2$，有
+$$
+\begin{aligned}
+\text{Var}(V)
+&=\text{Var}(S^2) \frac{(N-1)^2}{N^2}\\
+&=\frac{(N-1)^2}{N^2} \times \frac{1}{N}\left( m^4-\frac{N-3}{N-1}\sigma^4\right) \\
+&=\frac{(N-1)^2}{N^3}\left( m^4-\frac{N-3}{N-1}\sigma^4\right) \\
+\end{aligned}
+$$
+特殊的，当$z_i$服从正态分布
+$$
+\begin{aligned}
+\text{Var}(V)
+&=\text{Var}(S^2) \frac{(N-1)^2}{N^2}\\
+&=\frac{(N-1)^2}{N^2} \times \frac{2\sigma^4}{N-1} \\
+&=\frac{2(N-1)\sigma^4}{N^2}\\
+\end{aligned}
+$$
+\end{enumerate}
+
+\item
+%%%%%%%%第4题
+若观测方程为$$z_k=h_k\theta + n_k \quad k=1,2,...,N$$其中$\theta$是方差为$\sigma_{\theta}^2$的零均值高斯随机变量；$n_k$是方差为$\sigma_{n}^2$的零均值高斯白噪声。
+\begin{enumerate}[(1)]
+\item
+求$\theta$的最小均方误差估计$\hat\theta_{MS}(z)$和最大后验概率估计$\hat\theta_{MAP}(z)$，并考察其主要性能。
+\item
+如果$\theta$具有瑞利分布，即
+\[p(\theta )=\left\{ \begin{matrix}
+   \frac{\theta }{\sigma _{\theta }^{2}}\exp \left( -\frac{{{\theta }^{2}}}{2\sigma _{\theta }^{2}} \right),\theta \ge 0  \\
+   0,\qquad\theta <0  \\
+\end{matrix} \right.\]
+求$\theta$的最大后验概率估计$\hat\theta_{MAP}(z)$
+\end{enumerate}
+\textbf{解}:\\
+%%%这题公式好长啊，，，，不想打，，，，还好有奶茶，，，不然活不下去，，，，，
+\begin{enumerate}[(1)]
+\item
+由题目可知，$\bm{z}=\bm{h}\theta+\bm{n}$\\
+因为\\
+$$
+\begin{aligned}
+  p(\theta |z)&=\frac{p(z|\theta )p(\theta )}{p(z)} \\ 
+ p(z|\theta )&={{\left( \frac{1}{2\pi \sigma _{n}^{2}} \right)}^{\frac{N}{2}}}\exp \left( -\sum\limits_{i=1}^{N}{\frac{{{({{z}_{i}}-{{h}_{i}}\theta )}^{2}}}{2\sigma _{n}^{2}}} \right) \\ 
+ p(\theta )&={{\left( \frac{1}{2\pi \sigma _{\theta }^{2}} \right)}^{\frac{1}{2}}}\exp \left( -\frac{{{\theta }^{2}}}{2\sigma _{\theta }^{2}} \right) \\ 
+\end{aligned}
+$$
+观测可知$p(\theta|z)$也服从高斯分布，所以\\
+\[\begin{aligned}
+ p(\theta |z)
+ & ={{K}_{1}}(z)\exp \left[ -\sum\limits_{i=1}^{N}{\frac{{{({{z}_{i}}-{{h}_{i}}\theta )}^{2}}}{2\sigma _{n}^{2}}}-\frac{{{\theta }^{2}}}{2\sigma _{\theta }^{2}} \right] \\ 
+ & ={{K}_{2}}(z)\exp \left[ -\frac{{{\theta }^{2}}}{2\sigma _{\theta }^{2}}-\frac{\sum\limits_{i=1}^{N}{(-2{{z}_{i}}{{h}_{i}}\theta +{{h}_{i}}{{\theta }^{2}})}}{2\sigma _{n}^{2}} \right] \\ 
+ & ={{K}_{3}}(z)\exp \left[ -\frac{\left( \sigma _{n}^{2}+\sigma _{\theta }^{2}\sum\limits_{i=1}^{N}{h_{i}^{2}} \right){{\theta }^{2}}-2\theta \sigma _{\theta }^{2}\sum\limits_{i=1}^{N}{{{z}_{i}}{{h}_{i}}}}{2\sigma _{n}^{2}\sigma _{\theta }^{2}} \right] \\ 
+ & ={{K}_{3}}(z)\exp \left[ -\frac{{{\theta }^{2}}-2\theta \sigma _{\theta }^{2}\sum\limits_{i=1}^{N}{{{z}_{i}}{{h}_{i}}}/\left( \sigma _{n}^{2}+\sigma _{\theta }^{2}\sum\limits_{i=1}^{N}{h_{i}^{2}} \right)}{2\sigma _{n}^{2}\sigma _{\theta }^{2}/\left( \sigma _{n}^{2}+\sigma _{\theta }^{2}\sum\limits_{i=1}^{N}{h_{i}^{2}} \right)} \right] \\ 
+\end{aligned}\]
+其中$K_1(z)\ K_2(z)\ K_3(z)\ $均为与$\theta$无关的系数。\\
+因此，有
+\[\begin{aligned}
+  {{{\hat{\theta }}}_{MAP}}\text{=}{{{\hat{\theta }}}_{MS}}&=\frac{\sigma _{\theta }^{2}\sum\limits_{i=1}^{N}{{{z}_{i}}{{h}_{i}}}}{\sigma _{n}^{2}+\sigma _{\theta }^{2}\sum\limits_{i=1}^{N}{h_{i}^{2}}} \\ 
+ \operatorname{var}({{{\hat{\theta }}}_{MAP}})=\operatorname{var}({{{\hat{\theta }}}_{MS}})&=\frac{\sigma _{n}^{2}\sigma _{\theta }^{2}}{\sigma _{n}^{2}+\sigma _{\theta }^{2}\sum\limits_{i=1}^{N}{h_{i}^{2}}} \\ 
+\end{aligned}\]
+考察其无偏性，因为
+\[E[{{{\hat{\theta }}}_{MAP}}\text{ }\!\!]\!\!\text{ =E }\!\![\!\!\text{ }{{{\hat{\theta }}}_{MS}}]=\frac{\sigma _{\theta }^{2}\sum\limits_{i=1}^{N}{E[{{z}_{i}}]{{h}_{i}}}}{\sigma _{n}^{2}+\sigma _{\theta }^{2}\sum\limits_{i=1}^{N}{h_{i}^{2}}}=0=E[\theta ]\]
+所以其估计是无偏的。
+考察其Cramer-Rao下界，为
+\[{{\left\{ -E\left[ \frac{{{\partial }^{2}}\ln p(z;\theta )}{\partial {{\theta }^{2}}} \right] \right\}}^{-1}}=\frac{\sigma _{n}^{2}\sigma _{\theta }^{2}}{\sigma _{n}^{2}+\sigma _{\theta }^{2}\sum\limits_{i=1}^{N}{h_{i}^{2}}}=\operatorname{var}\left( {{{\hat{\theta }}}_{MAP}} \right)\]
+所以其无偏估计是有效的。
+\item
+当$\theta$具有瑞利分布时，显然\({{{\hat{\theta }}}_{MAP}}>0\)，因此
+\[\frac{\partial \ln p(z\text{ }\!\!|\!\!\text{ }\theta )}{\partial \theta }\text{+}\frac{\partial \ln p(\theta )}{\partial \theta }=-\sum\limits_{i=1}^{N}{\frac{(\theta {{h}_{i}}-{{z}_{i}}){{h}_{i}}}{\sigma _{n}^{2}}}\text{+}\frac{1}{\theta }-\frac{\theta }{\sigma _{\theta }^{2}}\]
+令其为0可得\({{{\hat{\theta }}}_{MAP}}\)，整理得
+\[\hat{\theta }_{MAP}^{2}\left( \frac{1}{\sigma _{\theta }^{2}}+\sum\limits_{i=1}^{N}{\frac{h_{i}^{2}}{\sigma _{n}^{2}}} \right)-\hat{\theta }_{MAP}^{2}\sum\limits_{i=1}^{N}{\frac{{{z}_{i}}{{h}_{i}}}{\sigma _{n}^{2}}}-1=0\]
+因此可得：
+\[{{{\hat{\theta }}}_{MAP}}=\frac{\sum\limits_{i=1}^{N}{\frac{{{z}_{i}}{{h}_{i}}}{\sigma _{n}^{2}}}+\sqrt{{{\left( \sum\limits_{i=1}^{N}{\frac{{{z}_{i}}{{h}_{i}}}{\sigma _{n}^{2}}} \right)}^{2}}+4\left( \frac{1}{\sigma _{\theta }^{2}}+\sum\limits_{i=1}^{N}{\frac{h_{i}^{2}}{\sigma _{n}^{2}}} \right)}}{2\left( \frac{1}{\sigma _{\theta }^{2}}+\sum\limits_{i=1}^{N}{\frac{h_{i}^{2}}{\sigma _{n}^{2}}} \right)}\]
+\end{enumerate}
+%%%%%%%%%做题十分钟，打题半小时%%%%%%%%%%
+%%%%%%%%%注意不要打开PDF后还编译%%%%%%%%%
+\end{enumerate}
+\end{document}

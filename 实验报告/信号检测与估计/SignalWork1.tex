@@ -1,0 +1,153 @@
+%!TEX program=xelatex
+\documentclass{article}
+%packages
+\usepackage[UTF8]{ctex} %中文字符
+\CTEXoptions[today=old]
+\usepackage[left=2.50cm, right=2.50cm, top=2.50cm, bottom=2.50cm]{geometry} %调整页边距
+\usepackage{xeCJK}
+\usepackage{enumerate}%使用枚举
+\usepackage{mathtools}
+\usepackage{titlesec}
+\renewcommand{\thesection}{\chinese{section}}%设置section
+\usepackage{bm}%加粗数学公式
+\usepackage{amssymb}%因为所以
+\usepackage{mathrsfs} %花体字
+\usepackage{amsmath}%不太花的花体字
+
+
+\begin{document}
+\title{《信号检测与估计》作业一}
+\author{施念  1120161302}
+%\date{}
+\maketitle{}
+%\begin{abstract}%摘要部分
+%\end{abstract}
+%\tableofcontents%生成目录
+\section{第2章\ 检测基本理论}
+\begin{enumerate}[1.]
+%%%%%%%%%%第1题
+\item 
+设矩形包络的单个中频脉冲信号为$$s(t)=Arect(\frac{t}{\tau})cos\omega_{0}t$$其中，$rect(\cdot)$为矩形函数，即
+$$rect(x)=
+	\begin{cases}
+	1,& |x|\ge \frac{\tau}{2}\\
+	0,& |x|<\frac{\tau}{2}
+	\end{cases} 
+$$
+
+\begin{enumerate}[(1)]
+%%%%%%%%%%%%%%%%第（1）题
+\item 求信号$s(t)$的匹配滤波器的系统函数$H(w)$和冲激响应$h(t)$。\\
+\textbf{解}：\\
+$\because$由题目可知\[\ s(t)=Arect(\frac{t}{\tau})cos\omega_{0}t\]\\
+$\therefore$ 根据公式，其对应的匹配滤波器为$$h(t)=ks(t_{0}-t)\\ = kArect(\frac{t_{0}-t}{\tau})cos\omega_{0}(t_{0}-t)$$\\
+又\(\because\)对\(cos\omega_{0}t\) 、\(rect(\frac{t}{\tau})\),有
+	\[\mathscr{F}[cos\omega_{0}t]=\pi[\delta(\omega-\omega_{0})+\delta(\omega+\omega_{0})]\]
+	\[\mathscr{F}[rect(\frac{t}{\tau})]=\tau sinc(\frac{\omega\tau}{2})\]\\
+\(\therefore\)对\(s(t)\),有
+	\[\mathscr{F}[ s(t) ]= \frac{A\tau}{2} [sinc(\frac{\omega-\omega_{0}}{2}\tau)+sinc(\frac{\omega-\omega_{0}}{2}\tau) ] \]
+	\(\therefore\)对\(H(\omega)\),有
+$$
+H(\omega)= kS^{*}(\omega)e^{-j\omega t_{0}}
+	=\frac{kA\tau}{2}[sinc(\frac{\omega-\omega_{0}}{2}\tau)+sinc(\frac{\omega-\omega_{0}}{2}\tau) ]e^{-j\omega t_{0}}
+$$
+在上述公式中，可取\(t_{0}=\frac{\tau}{2},k=1\)\\
+
+
+		 
+		 
+%%%%%%%%%%%%%%%%第（2）题
+\item 若匹配滤波器输入噪声$n(t)$是功率谱密度$G_{\omega}=\frac{N_{0}}{2}$的白噪声，求匹配滤波器的输出功率信噪比SNR。\\
+\textbf{解}：\\
+\(\because H(\omega)= kS^{*}(\omega)e^{-j\omega t_{0}} , k=1\)\\
+\(\therefore\)对输出信噪比，有
+\begin{equation*}%带*表示不加编号
+\begin{split}
+SNR_{o}=d^{2} =& \frac { \frac{1}{2\pi} \int_{-\infty}^{\infty} |H(\omega)|^{2} d\omega } { N_{0}/2 } \\
+	   =& \frac { \frac{1}{2\pi} \int_{-\infty}^{\infty} |S(\omega)|^{2} d\omega } { N_{0}/2 } \\
+	   =& \frac { \int_{- \frac{\tau}{2}}^{ \frac{\tau}{2}} |s(t)|^{2} dt } { N_{0}/2 } \\
+	   =& A^{2}\frac { 2\int_{0}^{ \frac{\tau}{2}} cos^{2}(\omega_{0}t) dt } { N_{0}/2 } \\
+	   =& A^{2}\frac { \frac{\tau }{2}+\frac{ sin(2\omega_{0}t) }{2\omega_{0}}|_{0}^{\frac{\tau}{2}} }{N_{0}/2 }\\
+	   =& \frac{A^{2}\tau}{N_{0}}
+\end{split}
+\end{equation*}
+\end{enumerate}
+
+%%%%%%%%%第2题
+\item 
+设线性调频矩形脉冲信号为$$s(t)=Arect(\frac{t}{\tau})cos(\omega_{0}t+\frac{\mu t^{2}}{2})$$
+\qquad 式中，$rect(\cdot)$为矩形函数;\(\mu\)为调频系数.$$$$%03100043
+\qquad 线性调频信号的瞬时频率为$$\omega=\frac{d\varphi}{dt}=\omega_{0}+\mu t$$
+\qquad 在脉冲宽度\(\tau\)内，信号的角频率由$w_{0}-\frac{\mu \pi}{2}$变化到$w_{0}+\frac{\mu \pi}{2}$；调频带宽$B=\frac{\mu\pi}{2\pi}$；重要参数时宽带宽积$D$为$$D=B\tau=\frac{1}{2\pi}\mu\tau^{2}$$
+
+\begin{enumerate}[(1)]
+%%%%%%%%%第(1)题
+\item 求线性调频信号的频谱函数$S(\omega)$。\\
+\textbf{解}：\\
+对$s(t)=Arect(\frac{t}{\tau})cos(\omega_{0}t+\frac{\mu t^{2}}{2})$,将其表示为复数形式$\widetilde{s}(t)=Arect(\frac{t}{\tau})e^{j(\frac{\mu}{2}t^{2}+\omega_{0}t)}$\\
+则有
+
+\begin{equation*}%带*表示不加编号
+\begin{split}
+ \widetilde{S}(\omega)=\mathscr{F}[ \widetilde{s}(t) ]
+	&=A\int_{-\tau/2}^{\tau/2}e^{j(\frac{\mu}{2}t^{2}+\omega_{0}t)}e^{-j\omega t}dt\\
+	&=A\int_{-\tau/2}^{\tau/2}e^{j[(\sqrt{\frac{\mu}{2}}t+\frac{\omega_{0}-\omega}{\sqrt{2\mu}})^{2}-\frac{(\omega_{0}-\omega)^2}{2\mu}]}dt\\
+	&=Ae^{-jp^{2}}\int_{-\tau/2}^{\tau/2}e^{j(\sqrt{\frac{\mu}{2}}t+p)^{2}}dt
+	\qquad for\quad p=\frac{\omega_{0}-\omega}{\sqrt{2\mu}}\\
+	&=A\sqrt{\frac{2}{\mu}}e^{-jp^{2}}\int_{q_{2}}^{q_{1}}[cos(m^{2})+jsin(m^{2})]dm
+	\qquad for \quad q_{1}=p-\frac{\tau}{2}\sqrt{\frac{\mu}{2}} \quad q_{2}=p+\frac{\tau}{2}\sqrt{\frac{\mu}{2}} \\
+	&=A\sqrt{\frac{2}{\mu}}e^{-jp^{2}}\{[\mathcal{C}(q_{2})-\mathcal{C}(q_{1})]+j[\mathcal{S}(q_{2})-\mathcal{S}(q_{1})]\}\\
+\end{split}
+\end{equation*}
+%%%%%%%%%第(2)题
+\item 求匹配滤波器的系统函数$H(\omega)$。\\
+\textbf{解}：\\
+由（1）可知，$S(\omega)=A\sqrt{\frac{2}{\mu}}e^{-jp^{2}}\{[\mathcal{C}(q_{2})-\mathcal{C}(q_{1})]+j[\mathcal{S}(q_{2})-\mathcal{S}(q_{1})]\}$\\
+故,对$H(\omega)$,有
+\begin{equation*}
+\begin{split}
+H(\omega)
+&= kS^{*}(\omega)e^{-j\omega t_{0}}\\
+&=kA\sqrt{\frac{2}{\mu}}e^{j(p^{2}-\omega t_{0})}\{[\mathcal{C}(q_{2})-\mathcal{C}(q_{1})] - j[\mathcal{S}(q_{2})-\mathcal{S}(q_{1})]\}
+\end{split}
+\end{equation*}
+一般取$k=1$或$k=\frac{\sqrt{\mu/2}} {A}$
+%%%%%%%%%第(3)题
+\item 求匹配滤波器的输出信号$s_{o}(t)$和输出功率信噪比SNR。\\
+\textbf{解}：\\
+由给出的公式（2.7.50）可知：\\输出信号
+\begin{equation*}
+\begin{split}
+s_{o}(t)=\frac{kA^{2}\tau}{2} \frac{sin[ \frac{\tau\mu}{2}t(1-\frac{t}{\tau}) ]} { \frac{\tau\mu}{2}t }  cos2\pi f_{0}t
+\end{split}
+\end{equation*}
+信噪比\\
+\begin{equation*}
+\begin{split}
+SNR=d_{max} = \frac{s_{o}^{2}(0)} {n_{o}^{2}(t)} = \frac{2E} {N_{0}}=\frac{A\tau^{2}} {N_{0}}
+\end{split}
+\end{equation*}
+
+\end{enumerate}
+
+%%%%%%%%%第3题
+%%%%%%%%%做题十分钟，打题半小时%%%%%%%%%%
+\item
+设计一个最大输出信噪比滤波器，发送信号是$y(t)$，并在加性白噪声中观测，噪声谱密度是$N_{0}/2$。信号$y(t)$为
+$$y(t)=
+	\begin{cases}
+	e^{-t/2}-e^{3t/2},& 0\le t \le T\\
+	0,& others
+	\end{cases} 
+$$
+最大输出信噪比是多少？假定$\int_{0}^{T}y^{2}(t)dt=1$。\\
+\textbf{解}：\\
+由于匹配滤波器的最大分值信噪比$d_{max}$只取决于输入信号的能量和白噪声功率谱密度，与输入信号形状和噪声分布律无关，所以\\
+\begin{equation*}
+\begin{split}
+d_{max} &= \frac{2E} {N_{0}}\\
+&=\frac{2} {N_{0}}
+\end{split}
+\end{equation*}
+\end{enumerate}
+\end{document}

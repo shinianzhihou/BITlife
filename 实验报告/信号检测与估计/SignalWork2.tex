@@ -1,0 +1,156 @@
+%!TEX program=xelatex
+\documentclass{article}
+%packages
+\usepackage[UTF8]{ctex} %中文字符
+\CTEXoptions[today=old]
+\usepackage[left=2.50cm, right=2.50cm, top=2.50cm, bottom=2.50cm]{geometry} %调整页边距
+\usepackage{xeCJK}
+\usepackage{enumerate}%使用枚举
+\usepackage{mathtools}
+\usepackage{titlesec}
+\renewcommand{\thesection}{\chinese{section}}%设置section
+\usepackage{bm}%加粗数学公式
+\usepackage{amssymb}%因为所以
+\usepackage{mathrsfs} %花体字
+\usepackage{amsmath}%不太花的花体字
+% MATLAB代码插入包
+\usepackage{listings}
+\usepackage[framed,numbered,autolinebreaks,useliterate]{mcode}
+
+\begin{document}
+\title{《信号检测与估计》作业二\footnote{习题2.1\quad2.2\quad2.3\quad2.4}}
+\author{施念  1120161302}
+\date{April 12, 2019}
+\maketitle{}
+%\begin{abstract}%摘要部分
+%\end{abstract}
+%\tableofcontents%生成目录
+\section{第2章\ 检测基本理论}
+\begin{enumerate}[1.]
+%%%%%%%%%%第1题
+\item 
+根据N个独立样本，设计一个似然比检验，对下列假设进行选择
+\begin{equation*}
+\begin{split}
+H_0:z(t)&=n(t)\\
+H_1:z(t)&=1+n(t)\\
+H_2:z(t)&=-1+n(t)\\
+\end{split}
+\end{equation*}
+其中n(t)是零均值、方差$\sigma^2$的高斯过程。假定各假设的先验概率相等，正确判断无代价，任何错误的代价相同。证明检验统计量可选为$l(z)=\frac{1}{N}\sum_{i=1}^{N}z_i$。求$l(z)$的判决区域。
+
+\textbf{解}：\\
+根据各假设的先验概率相等以及代价因子的特性，三元假设检验可按照最大似然准则来设计。\\
+N维观测矢量的似然函数为
+\begin{equation*}
+\begin{split}
+p(\mathbf{z}|H_i)&=\prod_{k=1}^{N} P(z_k|H_i)\\
+&=\left(  \frac{1}{2\pi\sigma _n^2} \right)^{\frac{N}{2}}exp\left[ -\sum_{k=1}^{N} \frac{(z_k-s_i)^2}{2\sigma_n^2}  \right],s_i(i)=0(0),1(1),-1(2)\\
+\end{split}
+\end{equation*}
+似然比为
+\[\Lambda (x) = \frac{{p(x|{H_i})}}{{p(x|{H_j})}}\mathop{\gtrless}\limits_{H_i}^{H_j}1\]
+因此三元假设判决规则等价于选择最大的
+\[\frac{{2{s_i}}}{N}\sum\limits_{k = 1}^N {{z_k} - s_i^2\qquad i = 0,1,2} \]
+故对检验统计量$\hat z = l(z)=\frac{1}{N}\sum_{i=1}^{N}z_i$，判决区域为：
+\begin{center}
+$l(z)\le-0.5$，判断$H_2$成立\\
+$-0.5\le l(z)\le0.5$，判断$H_0$成立\\
+$l(z)\ge0.5$，判断$H_1$成立\\
+\end{center}
+
+
+%%%%%%%%%第2题
+\item 
+根据一次观测，用极大极小化检
+验来对下面两个假设做出判断。
+\begin{equation*}
+\begin{split}
+H_0:z(t)&=1+n(t)\\
+H_1:z(t)&=n(t)\\
+\end{split}
+\end{equation*}
+假定n(t)是具有零均值和功率$\sigma^2$的高斯过程，以及$C_{00}=C_{11}=0,\ C_{01}=C_{10}=1$。根据观测结果给出的门限是什么？答案意味着每一个假设的先验概率是多少？\\
+\textbf{解}：\\
+因为$C_{00}=C_{11}=0,\ C_{01}=C_{10}=1$，所以对代价函数有
+$$C(P_1,P_{1g})=(1-P_1)P_F(P_{1g})+P_M(P_{1g})P_1$$
+求导并令结果为0得
+$$P_F(P_{1g})=P_M(P_{1g})$$
+由题目可知，当$P_F(P_{1g})=P_M(P_{1g})$时，门限$\lambda=(1+0)/2=0.5$。
+此时意味着每一个假设的先验概率相等都为$1/2$
+
+
+%%%%%%第3题
+\item
+若题2.2假定$C_{10}=3,C_{01}=6$。
+\begin{enumerate}[(1)]
+\item
+%%%3.1
+每个假设的先验概率为何值时达到最大的可能代价？\\
+\textbf{解}：\\
+根据2.2，可知，当$C_{10}=3,C_{01}=6$时，欲使代价最小，有
+$$P_F(P_{1g})=2P_M(P_{1g})$$
+即
+\[P({H_1}|{H_0}) = 2P({H_0}|{H_1})\]
+结合
+\[P({H_1}|{H_0}) = \frac{{P({H_0}|{H_1})P({H_1})}}{{P({H_0})}}\]
+\[P({H_1}) + P({H_0}) = 1\]
+可知先验概率为
+\[\left\{ \begin{array}{l}
+P({H_1}) = \frac{2}{3}\\
+P({H_0}) = \frac{1}{3}
+\end{array} \right.\]
+此时达到最大的可能代价
+\item
+%%%3.2
+根据一次观测的判决区域如何？
+
+根据上式可知
+\[\frac{{p(x|{H_1})}}{{p(x|{H_0})}}\mathop{\gtrless} \limits_{{H_0}}^{{H_1}} \frac{{({C_{10}} - {C_{00}})P({H_0})}}{{({C_{01}} - {C_{11}})P({H_1})}} = \frac{{3 \times \frac{1}{3}}}{{6 \times \frac{2}{3}}} = \frac{1}{4}\]
+因为
+\[\frac{{p(x|{H_1})}}{{p(x|{H_0})}}{\rm{ = }}{{\rm{e}}^{[ - \frac{{{x^2} - {{(x - 1)}^2}}}{{2{\sigma ^2}}}]}} = {e^{( - 2x + 1)/(2{\sigma ^2})}}\]
+所以，有
+\[{e^{( - 2x + 1)/(2{\sigma ^2})}}\mathop{\gtrless}\limits_{{H_0}}^{{H_1}} \frac{1}{4}\]
+化简得
+\[x\mathop{\gtrless} \limits_{{H_1}}^{{H_0}} \frac{1}{2} + {\sigma ^2}\ln4\]
+判决区域为(z为一次观测量)：
+\begin{center}
+$z\le\frac{1}{2} + {\sigma ^2}\ln 4$，判断$H_1$成立\\
+$z\ge\frac{1}{2} + {\sigma ^2}\ln 4$，判断$H_0$成立\\
+\end{center}
+
+\end{enumerate}
+
+\item
+%%%%%%%%第4题
+证明二元假设检验贝叶斯平均代价\(\bar C\)可表示为
+\[\begin{array}{l}
+\bar C = {C_{00}} + ({C_{10}} - {C_{00}})P({H_1}|{H_0}) + P({H_1})[({C_{11}} - {C_{00}}) + \\
+\qquad({C_{01}} - {C_{11}})P({H_0}|{H_1}) - ({C_{10}} - {C_{00}})P({H_1}|{H_0})]\\
+\end{array}\]
+\textbf{解}:\\
+对于二元假设检验，有
+\[P({H_1}) = 1 - P({H_0})\qquad P({H_0}) = 1 - P({H_1})\]
+\[P({H_0}|{H_0}){\rm{ = 1}} - P({H_1}|{H_0}){\rm{ = }}1 - {P_F}\]
+\[P({H_1}|{H_1}){\rm{ = 1}} - P({H_0}|{H_1}){\rm{ = }}1 - {P_M}\]
+所以对贝叶斯平均代价\(\bar C\)，有
+\[\begin{array}{l}
+{\bar C}
+ = {C_{00}}P({H_0})P({H_0}|{H_0}) + {C_{01}}P({H_1})P({H_0}|{H_1}) + \\
+\qquad{C_{10}}P({H_0})P({H_1}|{H_0}) + {C_{11}}P({H_1})P({H_1}|{H_1})\\
+ = {C_{00}}[1 - P({H_1})](1 - {P_F}) + {C_{01}}P({H_1}){P_M} + \\
+\qquad{C_{10}}[1 - P({H_1})]{P_F} + {C_{11}}P({H_1})(1 - {P_M})\\
+ = {C_{00}} + ({C_{10}} - {C_{00}}){P_F} + P({H_1})({P_F}{C_{00}} - {C_{00}}\\
+ \qquad + {C_{01}}{P_M} - {C_{10}}{P_F} + {C_{11}} - {C_{11}}{P_M})\\
+ = {C_{00}} + ({C_{10}} - {C_{00}}){P_F} + P({H_1})[({C_{11}} - {C_{00}}) \\
+ \qquad+ ({C_{01}} - {C_{11}}){P_M} - ({C_{10}} - {C_{00}}){P_F}]\\
+ = {C_{00}} + ({C_{10}} - {C_{00}})P({H_1}|{H_0}) + P({H_1})[({C_{11}} - {C_{00}}) + \\
+ \qquad({C_{01}} - {C_{11}})P({H_0}|{H_1}) - ({C_{10}} - {C_{00}})P({H_1}|{H_0})]
+\end{array}\]
+证毕
+
+
+%%%%%%%%%做题十分钟，打题半小时%%%%%%%%%%
+%%%%%%%%%注意不要打开PDF后还编译%%%%%%%%%
+\end{enumerate}
+\end{document}

@@ -1,0 +1,308 @@
+%!TEX program=xelatex
+\documentclass{article}
+%packages
+\usepackage[UTF8]{ctex} %中文字符
+\CTEXoptions[today=old]
+\usepackage[left=2.50cm, right=2.50cm, top=2.50cm, bottom=2.50cm]{geometry} %调整页边距
+\usepackage{xeCJK}
+\usepackage{enumerate}%使用枚举
+\usepackage{mathtools}
+\usepackage{titlesec}
+\renewcommand{\thesection}{\chinese{section}}%设置section
+\usepackage{bm}%加粗数学公式
+\usepackage{amssymb}%因为所以
+\usepackage{mathrsfs} %花体字
+\usepackage{amsmath}%不太花的花体字
+% MATLAB代码插入包
+\usepackage{listings}
+\usepackage[framed,numbered,autolinebreaks,useliterate]{mcode}
+
+\begin{document}
+\title{《信号检测与估计》作业四 \footnote{习题2.27\quad2.28\quad3.1\quad3.2\quad3.5}}
+\author{施念  1120161302}
+\date{}
+\maketitle{}
+%\begin{abstract}%摘要部分
+%\end{abstract}
+%\tableofcontents%生成目录
+\section{第5章\ 噪声中的信号处理}
+\begin{enumerate}[1.]
+\item
+在功率谱密度$G_n(\omega)=\frac{N_0}{2}$的加性高斯白噪声$n(t)$背景中，假设$H_j$下的接受信号为 \[
+	H_j:z(t)=s_j(t)+n(t),\quad0\le t\le 
+\]
+其中，信号 $ s_j(t) $的能量为 \[
+	E_j=\int_0^Ts_j^2(t)dt	
+\]
+采用正交级数展开法时，先建立N维似然比检验 $ \Lambda[z_N] $，再取 $ N \rightarrow \infty $的极限获得$ \Lambda[z_N] $。如果在获得前N个系数 $ z_k $的联合概率密度函数（似然函数） \(p(r_n|H_j)\)后，先取 $ N \rightarrow \infty $的极限，求得似然函数 \(p(z(t)|H_j)\)，再建立似然比检验，结果是一样的。请证明似然函数\(p(z(t)|H_j)\)可以表示为\[
+	p[z(t)|H_j]=Fexp\left\{-\frac{1}{N_0}\int_0^T[z(t)-s_j(t)]^2dt\right \}
+\]
+其中\[
+	F=\underset{N \rightarrow +\infty }{lim}\left(\frac{1}{\pi N_0}\right)^{N/2}
+\]
+
+
+\textbf{证明：}\\
+设一组正交函数集为 $ \{f_k(t)\} $，则在$ \{f_k(t)\} $下，有 \[
+	\begin{aligned}
+	&z(t)=\underset{N \rightarrow +\infty}{lim}\sum^N_{i=1}z_if_i(t)\\
+	&s(t)=\underset{N \rightarrow +\infty}{lim}\sum^N_{i=1}s_if_i(t)\\
+	&n(t)=\underset{N \rightarrow +\infty}{lim}\sum^N_{i=1}n_if_i(t)\\
+	&\int_0^Tf_k(t)f_l(t)dt= \delta_{k-l}\\
+	\end{aligned}
+\]
+因此，有 \[
+	\begin{aligned}
+	z_k = &\int_0^Tz(t)f_k(t)dt\\
+	\mathbb{E}[z_k|H_j]=&s_{jk}\\
+	\text{Var}[z_k|H_j]=&\frac{N_0}{2}\\
+	\int_0^Tz^2(t)dt=& \underset{N \rightarrow +\infty}{lim}\sum_{i=1}^{N}z_i^2\\
+	\int_0^Tz(t)s_j(t)dt=& \underset{N \rightarrow +\infty}{lim}\sum_{i=1}^{N}z_is_{ji}\\
+	\int_0^Ts_j^2(t)dt=& \underset{N \rightarrow +\infty}{lim}\sum_{i=1}^{N}s_i^2\\
+	\end{aligned}
+\]	
+对于似然函数\(p(z(t)|H_j)\)，有\[
+	\begin{aligned}
+	p(z(t)|H_j) &=\underset{N \rightarrow +\infty}{lim}p(z_1,z_2,\ldots,z_N|H_j)\\
+	&=\left( \frac{1}{\pi N_0} \right)^{N/2}exp\left[-\frac{1}{N_0}\underset{N \rightarrow +\infty}{lim}\sum_{i=0}^{N}(z_k-s_{jk})^2\right]\\
+	&=\left( \frac{1}{\pi N_0} \right)^{N/2}exp\left[-\frac{1}{N_0}\underset{N \rightarrow +\infty}{lim}\sum_{i=0}^{N}(z_k^2-2z_ks_{jk}+s^2_{jk})\right]\\
+	&=\left( \frac{1}{\pi N_0} \right)^{N/2}exp\left\{-\frac{1}{N_0}\int_{0}^{T}[z^2(t)-2z(t)s_{j}(t)+s^2_{j}(t)]dt\right\}\\
+	&=\left( \frac{1}{\pi N_0} \right)^{N/2}exp\left\{-\frac{1}{N_0}\int_0^T[z(t)-s_j(t)]^2dt\right\}\\
+	&=Fexp\left\{-\frac{1}{N_0}\int_0^T[z(t)-s_j(t)]^2dt\right \}
+	\end{aligned}
+\]
+证毕
+
+
+
+\item
+如果二元通信系统在两个假设下的接收信号分别为
+\[
+	H_0:z(t)=B\cos (\omega_2 t+\theta)+n(t),\quad 0\le t \le T
+\]
+\[
+	H_1:z(t)=A\cos (\omega_1 t) + B\cos (\omega_2 t+\theta)+n(t),\quad 0\le t \le T
+\]
+
+式中，$ A,B,\omega_1,\omega_2 $和$\theta$均为已知的常数。噪声$n(t)$是功率谱密度$ G_n(\omega)=\frac{N_0}{2} $的高斯白噪声。设计似然比门限为$ \lambda_0 $的最佳检测系统。信号$B\cos (\omega_2 t+\theta)$对接收机性能有什么影响？
+
+\textbf{解：}
+设\[
+		\begin{aligned}
+		&s_0(t)=B\cos (\omega_2 t+\theta)\\
+		&s_1(t)=A\cos (\omega_1 t) + B\cos (\omega_2 t+\theta)\\
+		&\int_0^Ts_0^2(t)dt=E_0\\
+		&\int_0^Ts_1^2(t)dt=E_1\\
+		&\alpha(t)=A\cos (\omega_1 t)\\
+		&\beta(t)=B\cos (\omega_2 t+\theta)\\
+		\end{aligned}
+\]
+因此，似然比 \[
+	\Lambda(z)=\frac{p[z(t)|H_1]}{	p[z(t)|H_0]}=exp\{-\frac{1}{N_0}\int_0^T[-2z(t)\alpha(t)+\alpha^2(t)+2\alpha(t)\beta(t)]dt\}\mathop{\gtrless}\limits_{H_0}^{H_1}\lambda_0
+\]	
+整理后可得：\[
+		\int_0^T\alpha(t)z(t)dt\mathop{\gtrless}\limits_{H_0}^{H_1}\frac{N_0}{2}\ln\lambda_0+\frac{1}{2}(E_1-E_0)
+\]
+
+即对输入$z(t)$信号，将其与$ s_1(t)-s_0(t)=\alpha(t) $信号进行相乘后积分，每隔T时刻进行抽样判决，判决门限为 $ 	\frac{N_0}{2}\ln\lambda_0+\frac{1}{2}(E_1-E_0) $，大于判决门限判为发送$ s_1(t) $，否则判为$ s_0(t) $。（相关接收机）\\
+
+讨论信号$B\cos (\omega_2 t+\theta)$对接收机性能有什么影响：
+
+设在正交函数集中，$ f_1(t)=K[s_1(t)-s_0(t)]=\sqrt{2}\alpha(t)/A $，则有 \[
+	\begin{aligned}
+	l=\int_{0}^T \alpha(t)z(t)dt=&\frac{A}{\sqrt{2}}\int_{0}^T f_1(t)z(t)dt=\frac{Az_1}{\sqrt{2}}\\
+	z(t)|H_0=&\underset{N\rightarrow +\infty}{\lim}\sum_{k=1}^{N}z_kf_k(t)=(s_{01}+n_{1})f_1(t)+M\\
+	z(t)|H_1=&(s_{11}+n_{1})f_1(t)+M\\
+	\end{aligned}	
+\]
+上式中，\[
+	\begin{aligned}
+	M=&\sum_{2}^{+\infty}z_kf_k(t) \\
+	s_{11}=&\int_0^Ts_1(t)f_1(t)dt = \frac{\sqrt{2}}{A}\int_0^T[\alpha(t)+\beta(t)]\alpha(t)dt\\
+	s_{01}=&\int_0^Ts_0(t)f_1(t)dt = \frac{\sqrt{2}}{A}\int_0^T\alpha(t)\beta(t)dt\\
+	\end{aligned}
+\]
+
+因此，有： \[
+	\begin{aligned}
+	l|H_0=&\frac{Az_1}{\sqrt{2}}=\frac{A(s_{01}+n_1)}{\sqrt{2}}\\
+	l|H_1=&\frac{Az_1}{\sqrt{2}}=\frac{A(s_{11}+n_1)}{\sqrt{2}}\\
+	\end{aligned}
+\]
+即： \[
+	\begin{aligned}
+	l|H_0& \sim N\left( \frac{As_{01}}{\sqrt{2}},\frac{N_0}{4} \right)\\
+	l|H_1& \sim N\left( \frac{As_{11}}{\sqrt{2}},\frac{N_0}{4} \right)\\
+	\end{aligned}
+\]
+因此信噪比（偏移系数） $ d^2 $为： \[
+	\begin{aligned}
+	d^2=&\frac{[E(l|H_1)-E(l|H_0)]^2}{\text{var}(l|H_0)}\\
+	   =&\frac{[A(s_{11}-s_{01})]^2/2}{N_0/4}\\
+	   =&\frac{[\int_0^T\alpha^2(t)dt]^2}{N_0/4}\\
+	   =&\frac{A^2T}{N_0}\\
+	\end{aligned}
+\]
+与 $ \beta(t)=B\cos(w_2t+\theta) $无关，因此其对接收机性能并没有什么影响。
+\\
+
+从“两个高斯分布的信号根据门限来判别的过程”这个角度分析，经过计算（和上面基本相同）发现，门限和两个高斯分布的均值之间的距离均与$ \beta(t) $无关，因此在判决（积分）时得到的 $ P(H_1|H_1)、P(H_0|H_0) $不受$ \beta(t) $的影响。从完全统计量的角度来看，观测量在$ s_1(t)-s_0(t)=\alpha(t) $这个向量上的投影决定了判决的结果，与$ \beta(t) $无关。
+
+
+\item
+在高斯白噪声中检测像$ \sqrt{\frac{2E_s}{T}}\sin (\omega_0t+\theta) $这样一类确知信号时，其中相位 $ \theta $是已知的，但不一定为0.假设为雷达类型的问题，则 \[
+	\begin{aligned}
+	&H_0:z(t)=n(t),& 0\le t\le T\\
+	&H_1:z(t)=\sqrt{\frac{2E_s}{T}}\sin(\omega_0t+\theta)+n(t),&0\le t\le T\\
+	\end{aligned}
+\]
+其中， $ E_s $为信号的能量， $ \omega_0 $和 $ \theta $已知；噪声 $ n(t) $是功率谱密度 $ G_n(\omega)=\frac{N_0}{2} $的高斯白噪声。
+
+\begin{enumerate}[(1)]
+\item
+如果在相关运算中，把相位 $ \theta $作为0来处理，但实际接收信号的 $ \theta $可能不等于0，求作为 $ \theta $函数的检测概率，并把它同 $ \theta=0 $的情况作比较。
+\item
+证明检测概率可能小于虚警概率，这取决于 $ \theta $的数值。
+\end{enumerate}
+
+\textbf{解：}
+
+\begin{enumerate}[(1)]
+\item
+在接收信号时，判决规则为： \[
+	l(z)=\int_0^Ts(t)z(t)dt\mathop{\gtrless}\limits_{H_0}^{H_1}\frac{N_0T}{2}\ln\lambda_0+\frac{1}{2}E_s=\gamma
+\]
+其中，发射信号$ s(t) = \sqrt{\frac{2E_s}{T}}\sin(\omega_0t)$（无相位延迟）。
+
+在正交函数集$ \{f_k(t)\} $上，取$ f_1(t)=\frac{s(t)}{\sqrt{E_s}} $，则有 \[
+	\begin{aligned}
+	l(z)& = \int_0^Ts(t)z(t)dt\\
+		& = \int_0^T\sqrt{E_s}f_1(t)z(t)dt\\
+		& = \sqrt{E_s}z_1\\
+	\end{aligned}
+\]
+因此，有 \[
+	\begin{aligned}
+	l|H_1 &= \sqrt{E_s}(s_1+n_1)\\
+		  &= \int_0^Ts(t)s(t)\cos\theta dt + \sqrt{E_s}n_1\\
+		  &= E_s\cos\theta + \sqrt{E_s}n_1\\
+		  &\sim N(E_s\cos\theta,N_0E_s/2)\\
+	l|H_0 &=\sqrt{E_s}n_1\\
+		  &\sim N(0,N_0E_s/2)\\
+	\end{aligned}
+\]
+
+因此检测概率为： \[
+	P_D=P(H_1|H_1)=\int_{\gamma}^{+\infty}p(l|H_1)dl=Q\left(\frac{\gamma-E_s\cos\theta}{\sqrt{N_0E_s/2}}\right)
+\]
+特殊的，当 $ \theta=0 $时\[
+	P_D=Q\left(\frac{\gamma-E_s}{\sqrt{N_0E_s/2}}\right)
+\]
+
+\item
+由（1）可知，虚警概率为 \[
+	P_F=P(H_1|H_0)=\int_{\gamma}^{+\infty}p(l|H_0)dl=Q\left(\frac{\gamma}{\sqrt{N_0E_s/2}}\right)
+\]
+当 $ P_D<P_F $时， \[
+	\gamma-E_s\cos\theta<\gamma
+\]
+即在 \[
+	\cos\theta >0 
+\]
+$$ 2k\pi -\frac{\pi}{2}<\theta <2k\pi +\frac{\pi}{2},\quad k=0,\pm 1,\pm2,\ldots,\pm N $$
+检测概率小于虚警概率，这取决于 $ \theta $。
+\end{enumerate}
+
+\item
+考虑在高斯噪声背景中检测高斯信号的问题。设 \[
+	\begin{aligned}
+	&H_0:z(t)=n(t),& 0\le t\le T\\
+	&H_1:z(t)=s(t)+n(t),&0\le t\le T\\
+	\end{aligned}
+\]
+其中 $ n(t) $和 $ s(t) $分别是零均值的高斯噪声和高斯信号，其带宽限于 $ |\omega|<\Omega=2\pi B $，功率谱密度分别为 $ N_0/2 $ 和 $ S_0/2 $。假设以 $ \pi/\Omega $的间隔取 $ 2BT $个样本的方式进行统计检测，试求似然比检测系统。
+
+\textbf{解：}
+因为采样频率 \[
+	f_s = \frac{1}{T_s}=\frac{\Omega}{\pi}=2B
+\]
+所以采样所得的样本之间相互独立。\\
+对第k次采样，有 \[
+	\begin{aligned}
+	p(z_k|H_0)&=\left(\frac{1}{2\pi N_0B}\right)^{\frac{1}{2}}exp\left( -\frac{1}{2N_0B}z_k^2 \right)\\
+	p(z_k|H_1)&=\left[\frac{1}{2\pi (N_0+S_0)B}\right]^{\frac{1}{2}}exp\left[ -\frac{1}{2(N_0+S_0)B}z_k^2 \right]\\
+	\end{aligned}
+\]
+设似然比检测门限为 $ \lambda ,\quad N=2BT,$则 \[
+	\begin{aligned}
+	p(z|H_0)&=\left(\frac{1}{2\pi N_0B}\right)^{\frac{N}{2}}exp\left( -\frac{1}{2N_0B}\sum_{k=1}^{N}z_k^2 \right)\\
+	p(z|H_1)&=\left[\frac{1}{2\pi (N_0+S_0)B}\right]^{\frac{N}{2}}exp\left[ -\frac{1}{2(N_0+S_0)B}\sum_{k=1}^{N}z_k^2 \right]\\
+	\end{aligned}
+\]
+因此似然比检测系统的判决准则为 \[
+	\begin{aligned}
+	\frac{P(z|H_1)}{P(z|H_0)}=\left(\frac{N_0}{N_0+S_0}\right)^{\frac{N}{2}}exp\left[\frac{S_0}{2(S_0+N_0)N_0B}\sum_{k=1}^{N}z_k^2\right]\mathop{\gtrless}\limits_{H_0}^{H_1} \lambda\\
+	\end{aligned}
+\]
+即 \[
+	l(z)=\sum_{i=1}^{2BT}z_k^2 \mathop{\gtrless}\limits ^{H_1}_{H_0} \left[\ln \lambda+BT\ln {(1+\frac{S_0}{N_0}})\right]\frac{2(S_0+N_0)N_0B}{S_0}=\gamma
+\]
+\item
+考虑简单二元随机相位信号的检测问题，两个假设分别为\[
+	\begin{aligned}
+	&H_0:z(t)=n(t),& 0\le t\le T\\
+	&H_1:z(t)=\sqrt{\frac{2E_s}{T}}\cos(\omega_0t+\theta)+n(t),&0\le t\le T\\
+	\end{aligned}
+\]
+其中 $ E_s $是信号 $ s(t) =  \sqrt{\frac{2E_s}{T}}\cos(\omega_0t+\theta) $的能量； $ \omega_0 $是已知的常数； $ n(t) $是功率谱密度 $ G_n(\omega)=\frac{N_0}{2} $的高斯白噪声。假定相位 $ \theta $是概率密度函数为 \[
+	p(\theta) = \frac{exp(v\cos \theta)}{2\pi I_0(v)},\quad -\pi\le \theta \le \pi
+\]
+的随机变量。若采用奈曼-皮尔逊准则，证明最佳检测系统如图题3-5所示。（注意，经过计算以及查找资料，发现书本上的图有错，下支路中线性滤波器应为 $ h(t)=\sqrt{\frac{T}{2}}\cos\omega_0(T-t) $，之后的增益系数应为$\frac{4E_s}{N_0^2}$）
+
+\textbf{解：}\\
+对于该系统， 假设\[\left\{ \begin{aligned}
+  & {{y}_{1}}(t)=\int\limits_{0}^{T}{z(t)\cos {{\omega }_{0}}t}dt \\ 
+ & {{y}_{2}}(t)=\int\limits_{0}^{T}{z(t)\sin {{\omega }_{0}}t}dt \\ 
+\end{aligned} \right.\]
+其似然比函数为\[\begin{aligned}
+ \Lambda (x)
+ &=\frac{p(z;\theta |{{H}_{1}})}{p(z|{{H}_{0}})} \\ 
+ & =\frac{\int\limits_{-\pi }^{\pi }{p(z|{{H}_{1}};\theta )p(\theta )}d\theta }{p(z|{{H}_{0}})} \\ 
+ & =\frac{\int\limits_{-\pi }^{\pi }{{{\left( \frac{1}{{{N}_{0}}\pi } \right)}^{\frac{N}{2}}}\exp \left\{ -\frac{1}{{{N}_{0}}}\int\limits_{0}^{T}{{{\left[ z(t)-s(t) \right]}^{2}}}dt \right\}p(\theta )}d\theta }{{{\left( \frac{1}{{{N}_{0}}\pi } \right)}^{\frac{N}{2}}}\exp \left\{ -\frac{1}{{{N}_{0}}}\int\limits_{0}^{T}{{{z}^{2}}(t)}dt \right\}} \\ 
+ & =\int\limits_{-\pi }^{\pi }{\exp \left\{ -\frac{1}{{{N}_{0}}}\int\limits_{0}^{T}{\left[ -2z(t)s(t)+{{s}^{2}}(t) \right]}dt \right\}p(\theta )}d\theta  \\ 
+ & =\int\limits_{-\pi }^{\pi }{\exp \left\{ -\frac{1}{{{N}_{0}}}\left[ \int\limits_{0}^{T}{-2z(t)s(t)}dt+{{E}_{s}} \right] \right\}p(\theta )}d\theta  \\ 
+ & =\int\limits_{-\pi }^{\pi }{\exp \left\{ -\frac{1}{{{N}_{0}}}\left[ \int\limits_{0}^{T}{-2z(t)s(t)}dt+{{E}_{s}} \right] \right\}p(\theta )}d\theta  \\ 
+ & =\exp \left( \frac{{{E}_{s}}}{{{N}_{0}}} \right)\int\limits_{-\pi }^{\pi }{\exp \left\{ \frac{2}{{{N}_{0}}}\sqrt{\frac{2{{E}_{s}}}{T}}\left[ {{y}_{1}}(t)\cos \theta -{{y}_{2}}(t)\sin \theta  \right] \right\}p(\theta )}d\theta  \\ 
+ & =\frac{\exp ({{E}_{s}}/{{N}_{0}})}{2\pi {{I}_{0}}(v)}\int\limits_{-\pi }^{\pi }{\exp \left\{ M\left[ {{y}_{1}}(t)\cos \theta -{{y}_{2}}(t)\sin \theta  \right]+v\cos \theta  \right\}}d\theta  \\ 
+ & =\frac{K}{2\pi {{I}_{0}}(v)}\int\limits_{-\pi }^{\pi }{\exp \left\{ M\left[ \left( {{y}_{1}}(t)+\frac{v}{M} \right)\cos \theta -{{y}_{2}}(t)\sin \theta  \right] \right\}}d\theta  \\ 
+ & =\frac{K}{2\pi {{I}_{0}}(v)}\int\limits_{-\pi }^{\pi }{\exp \left[ A(t)\cos (\theta +\varphi ) \right]}d\theta  \\ 
+ & =\frac{K}{{{I}_{0}}(v)}{{I}_{0}}(A(t)) \\ 
+\end{aligned}\]
+上式中， \[
+	\begin{aligned}
+	K = &exp(E_s/N_0)\\
+	M=&\frac{2}{N_0}\sqrt{\frac{2E_s}{T}}\\
+	A^2(t)=&{{\left[ M{{y}_{1}}(t)+v \right]}^{2}}+{{\left[ M{{y}_{2}}(t) \right]}^{2}}={{M}^{2}}\left[ y_{1}^{2}(t)+y_{2}^{2}(t) \right]+2Mvy_1(t)+v^2
+	\end{aligned}
+\]
+根据贝塞尔函数 $ I_0(x) $的单调性，将 $ v^2 $减去，因此判决准则为 \[
+\begin{aligned}
+	{{M}^{2}}\left[ y_{1}^{2}(t)+y_{2}^{2}(t) \right]+2Mvy_1(t) \mathop{\gtrless} \limits ^{H_1}_{H_0}\lambda_0\\
+\end{aligned}
+\]
+其中， $ \lambda_0 $根据奈曼-皮尔逊准则获得。\\
+观察给的检测系统，上支路输出为 $ 2Mvy_1(t) $\\
+下支先经过一个匹配滤波器，在经过一个包络平方检波器得到匹配滤波器包络的平方。\\
+线性滤波器输出为 \[\begin{aligned}
+ y(t)& =\sqrt{\frac{2}{T}}\int\limits_{0}^{t}{\cos {{\omega }_{0}}(T-t+\tau )z(\tau )}d\tau  \\ 
+ & =\sqrt{\frac{2}{T}}\left[ \cos {{\omega }_{0}}(T-t)\int\limits_{0}^{t}{z(\tau )\cos {{\omega }_{0}}\tau }d\tau +\sin {{\omega }_{0}}(T-t)\int\limits_{0}^{t}{z(\tau )\sin {{\omega }_{0}}\tau }d\tau  \right] \\ 
+\end{aligned}\]
+经过平方检波器后输出为 \(\frac{2}{T}\left[ y_{1}^{2}(t)+y_{2}^{2}(t) \right]\)，经过增益后输出\[{{M}^{2}}\left[ y_{1}^{2}(t)+y_{2}^{2}(t) \right]\]
+该检测系统将上下支路相加之后即是之前所求的 $ A^2(t) -v^{2}$，将其和门限比较。符合之前的推倒，此系统为最佳检测系统。
+
+证毕
+
+%%%%%%%%%做题十分钟，打题半小时%%%%%%%%%%
+%%%%%%%%%注意不要打开PDF后还编译%%%%%%%%%
+\end{enumerate}
+\end{document}

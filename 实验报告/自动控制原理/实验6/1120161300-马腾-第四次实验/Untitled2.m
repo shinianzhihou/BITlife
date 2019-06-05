@@ -1,0 +1,25 @@
+clear;
+clc;
+A=[0 1;-3 -4];
+B=[0;1];
+C=[2 0];
+D=[];
+sys=ss(A,B,C,D);
+t = 0:0.00001:5;
+x1 = step(sys,t);
+x2 = initial(sys,[0;1],t);
+plot(t,x1+x2);
+title('Step Response');
+xlabel('Time(seconds)');
+ylabel('Amplitude');
+grid on;
+hold on;
+A1 =A';
+B1 =C';
+C1 =B';
+P = [-12+j -12-j];
+K = place(A1,B1,P);
+G = K'
+sys = ss(A-G*C,B,C,D);
+step(sys);
+grid on;

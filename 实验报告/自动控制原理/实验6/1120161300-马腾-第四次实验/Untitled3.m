@@ -1,0 +1,15 @@
+clear;
+clc;
+A = [0 1;-3 -4];
+B = [0;1];
+C = [2 0];
+D=[];
+A1 =A';
+B1 =C';
+C1 =B';
+P = [-12+j -12-j];
+K = place(A1,B1,P);
+G = K';
+sys = ss(A-G*C,B,C,D);
+step(sys);
+grid on;
